@@ -11,6 +11,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Le decimos a Cmake donde estan las cabeceras .h de SDL3 las cuales se encuentran en la carpeta "include" dentro de este proyecto / vendor / SDL3 / include
 include_directories(vendor/SDL3/include)
 
+# Aprovechamos de agregar src\Vector2D.h como directorio de includes
+include_directories(src)
+
 # Le decimos a CMake donde encontrar los archivos .lib de SDL3
 link_directories(vendor/SDL3/lib/x64)
 
@@ -19,8 +22,7 @@ set(SDL3_LIBS SDL3)
 
 # Agregamos el ejecutable
 
-add_executable(PhysicsEngine src/main.cpp)
+add_executable(PhysicsEngine src/main.cpp src/Vector2D.cpp)
 
 # Linkeamos las bibliotecas de SDL3
 target_link_libraries(PhysicsEngine ${SDL3_LIBS})
-
