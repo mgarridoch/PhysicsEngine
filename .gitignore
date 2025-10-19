@@ -43,6 +43,9 @@ cmake_install.cmake
 *.vcxproj.filters
 *.vcxproj.user
 
+# Pero incluir TODOS los archivos de vendor/SDL3/
+!vendor/SDL3/**
+
 # =================================================================
 # Archivos del Sistema Operativo
 # =================================================================
