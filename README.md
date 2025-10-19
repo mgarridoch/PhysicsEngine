@@ -29,9 +29,9 @@ El desarrollo del motor está planificado en varias fases incrementales.
     -   [x] Configuración de proyecto con CMake.
     -   [x] Integración de la librería SDL3.
     -   [x] Creación de una ventana y un bucle de juego básico.
--   [ ] **Fase 1: Fundamentos Matemáticos**
-    -   [ ] Implementación de una clase `Vector2D` robusta.
-    -   [ ] Sobrecarga de operadores para operaciones vectoriales intuitivas.
+-   [x] **Fase 1: Fundamentos Matemáticos**
+    -   [x] Implementación de una clase `Vector2D` robusta.
+    -   [x] Sobrecarga de operadores para operaciones vectoriales intuitivas.
 -   [ ] **Fase 2: Arquitectura del Motor**
     -   [ ] Diseño de la clase `Body` para representar objetos físicos.
     -   [ ] Diseño de la clase `World` para gestionar la simulación.
