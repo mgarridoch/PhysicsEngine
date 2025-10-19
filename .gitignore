@@ -1,0 +1,53 @@
+# =================================================================
+# Archivos y Carpetas generados por el Sistema de Compilación (CMake)
+# =================================================================
+# ¡Esta es la regla más importante! Nunca subas la carpeta de build.
+/build/
+
+# CMake genera archivos de caché y configuración que son específicos
+# de tu máquina local.
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+
+# =================================================================
+# Binarios y Salida del Compilador
+# =================================================================
+# Ejecutables (Windows, Linux, macOS)
+*.exe
+*.out
+*.app
+
+# Bibliotecas compiladas y archivos objeto intermedios
+*.dll
+*.so
+*.dylib
+*.lib
+*.a
+*.obj
+*.o
+
+# Archivos de depuración de Visual Studio
+*.pdb
+*.ilk
+
+# =================================================================
+# Archivos específicos de IDEs y Editores de Texto
+# =================================================================
+# Visual Studio y VS Code
+.vs/
+.vscode/
+*.suo
+*.user
+*.vcxproj.filters
+*.vcxproj.user
+
+# =================================================================
+# Archivos del Sistema Operativo
+# =================================================================
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
