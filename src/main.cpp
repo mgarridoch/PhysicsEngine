@@ -15,7 +15,8 @@ int main(int argc, char* argv[]) {
 
     SDL_Window* window = SDL_CreateWindow("Physics Engine", SCREEN_WIDTH, SCREEN_HEIGHT, 0);
     if (!window) {
-        // ... manejo de error ...
+        std::cout << "Failed to create window: " << SDL_GetError() << std::endl;
+        SDL_Quit();
         return -1;
     }
 
@@ -29,19 +30,33 @@ int main(int argc, char* argv[]) {
 
     // --- CONFIGURACIÓN DE LA SIMULACIÓN ---
     World world;
-    const float dt = 1.0f / 60.0f; // Delta time: simulamos a 60 fotogramas por segundo
+
+    // --- LÓGICA DE TIEMPO ---
+    const float dt = 1.0f / 60.0f; // El timestep FIJO para la física
+    float accumulator = 0.0f;
+    Uint64 currentTime = SDL_GetPerformanceCounter();
+    Uint64 lastTime = 0;
+    // --- FIN DE LA LÓGICA DE TIEMPO ---
 
     // Creamos un cuerpo que caerá
-    Body fallingBody(Vector2D(SCREEN_WIDTH / 2.0f, 5.0f), 25.0f, 25.0f, 5.0f); // Posición inicial y masa
+    Body fallingBody(Vector2D(SCREEN_WIDTH / 2.0f, 50.0f), 25.0f, 25.0f, 5.0f); // Posición inicial y masa
     world.AddBody(fallingBody);
 
-    const Vector2D gravity(0.0f, 1.0f); // Gravedad (multiplicamos para que sea más visible)
+    const Vector2D gravity(0.0f, 800.0f); // Gravedad (multiplicamos para que sea más visible)
     // --- FIN DE LA CONFIGURACIÓN ---
 
     bool isRunning = true;
     SDL_Event event;
 
     while (isRunning) {
+        // --- 0. CÁLCULO DEL DELTA TIME REAL ---
+        lastTime = currentTime;
+        currentTime = SDL_GetPerformanceCounter();
+        // Delta time es el tiempo transcurrido en segundos
+        float deltaTime = (float)(currentTime - lastTime) / (float)SDL_GetPerformanceFrequency();
+        // Acumulamos el tiempo transcurrido
+        accumulator += deltaTime;
+
         // --- 1. MANEJO DE EVENTOS ---
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_EVENT_QUIT) {
@@ -49,12 +64,19 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // --- 2. ACTUALIZACIÓN (UPDATE) ---
-        // Aplicamos la fuerza de gravedad a todos los cuerpos
-        for (auto& body : world.GetBodies()) { // Necesitaremos un GetBodies() no-const para esto
-             body.AddForce(gravity);
+        // --- 3. ACTUALIZACIÓN DE FÍSICA (FIXED TIMESTEP) ---
+        // Mientras tengamos tiempo acumulado para dar un paso de física...
+        while (accumulator >= dt) {
+            // Aplicamos fuerzas (esto debería ir dentro del bucle de física)
+            for (auto& body : world.GetBodies()) {
+                 body.AddForce(gravity);
+            }
+            // ...actualizamos el mundo usando nuestro dt FIJO.
+            world.Update(dt, SCREEN_WIDTH, SCREEN_HEIGHT);
+            
+            // Y restamos el tiempo que acabamos de simular.
+            accumulator -= dt;
         }
-        world.Update(dt, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         // --- 3. RENDERIZADO (DRAW) ---
         SDL_SetRenderDrawColor(renderer, 20, 20, 40, 255); // Fondo azul

@@ -33,23 +33,19 @@ void World::Update(float dt , int screenWidth, int screenHeight) {
 
         // Check for border collision (at any border)
         if (body.position.x - body.width / 2.0f < 0) { // Left border
-            std::cout << "¡Colisión con el borde izquierdo!" << std::endl;
             body.position.x = body.width / 2.0f;
             body.velocity.x *= -0.5f; // Simple bounce with damping
 
         }
         if (body.position.x + body.width / 2.0f > screenWidth) { // Right border
-            std::cout << "¡Colisión con el borde derecho!" << std::endl;
             body.position.x = screenWidth - body.width / 2.0f;
             body.velocity.x *= -0.5f;
         } 
         if (body.position.y - body.height / 2.0f < 0) { // Top border
-            std::cout << "¡Colisión con el borde superior!" << std::endl;
             body.position.y = body.height / 2.0f;
             body.velocity.y *= -0.5f;
         } 
         if (body.position.y + body.height / 2.0f > screenHeight) { // Bottom border
-            std::cout << "¡Colisión con el borde inferior!" << std::endl;
             body.position.y = screenHeight - body.height / 2.0f; 
             body.velocity.y *= -0.5f;
         }
