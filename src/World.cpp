@@ -15,6 +15,11 @@ const Body& World::GetBody(int index) const {
     return m_bodies[index];
 }
 
+// Obtiene todos los cuerpos del mundo
+std::vector<Body>& World::GetBodies() {
+    return m_bodies;
+}
+
 // Actualiza la simulación del mundo, lo haremos despues.
 void World::Update(float dt) {
     // Para cada 'body' en nuestra lista de 'm_bodies'...

@@ -16,4 +16,8 @@ public:
 
     // Necesitamos una función para obtener un Body, ya que si desde main.cpp añadimos un Body al World, no tendremos acceso directo a él. (es una copia)
     const Body& GetBody(int index) const;
+
+    // Función para obtener todos los cuerpos (útil para renderizar)
+    const std::vector<Body>& GetBodies() const;
+    std::vector<Body>& GetBodies();
 };

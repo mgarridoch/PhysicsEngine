@@ -4,65 +4,21 @@
 #include "Body.h"
 #include "World.h"
 
-// Función principal
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
+
 int main(int argc, char* argv[]) {
-
-    // --- Pruebas Vector2D---
-    std::cout << "--- Iniciando pruebas de Vector2D ---" << std::endl;
-    Vector2D a(3.0f, 4.0f);
-    Vector2D b(1.0f, 2.0f);
-    // Prueba 1: Suma
-    Vector2D suma = a + b;
-    std::cout << "Prueba de Suma: " << a << " + " << b << " = " << suma << std::endl;
-    // Prueba 2: Magnitud
-    // Resultado esperado: sqrt(3*3 + 4*4) = sqrt(9 + 16) = sqrt(25) = 5
-    std::cout << "Prueba de Magnitud de a: " << a.Magnitude() << std::endl;
-    // Prueba 3: Multiplicación por escalar
-    Vector2D producto = a * 2.0f;
-    std::cout << "Prueba de Producto: " << a << " * 2.0 = " << producto << std::endl;
-    // Prueba 4: Normalización
-    Vector2D a_original = a; // Guardamos el original
-    a.Normalize();
-    std::cout << "Prueba de Normalizacion de " << a_original << ": " << a << std::endl;
-    std::cout << "Magnitud del vector normalizado: " << a.Magnitude() << std::endl; // Debería ser ~1.0
-    std::cout << "--- Fin de las pruebas ---" << std::endl;
-    // --- Fin pruebas Vector2D ---
-
-    // --- Pruebas Body y World ---
-    std::cout << "--- Iniciando pruebas de Body y World ---" << std::endl;
-    World world;
-    Body body(Vector2D(0, 0), 1.0f); // Cuerpo en el origen con masa 1.0
-    std::cout << "Cuerpo inicial en posicion: " << body.position << " con masa: " << body.mass << std::endl;
-    body.AddForce(Vector2D(10, 0)); // Añadir una fuerza hacia la derecha
-    std::cout << "Fuerza aplicada al cuerpo: " << body.sumOfForces << std::endl;
-    // Añadir el cuerpo al mundo
-    world.AddBody(body);
-    // Actualizar el mundo con un delta time de 1 segundo
-    world.Update(1.0f);
-    // Obtener el cuerpo actualizado y mostrar su nueva posición
-    const Body& updatedBody = world.GetBody(0);
-    std::cout << "Posicion del cuerpo despues de 1 segundo: " << updatedBody.position << std::endl;
-    world.Update(1.0f); // Actualizar otro segundo
-    const Body& updatedBody2 = world.GetBody(0);
-    std::cout << "Posicion del cuerpo despues de 2 segundos: " << updatedBody2.position << std::endl;
-    std::cout << "--- Fin de las pruebas ---" << std::endl;
-    // --- Fin pruebas Body y World ---
-
-    // Inicializar SDL
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         std::cout << "Failed to initialize SDL3: " << SDL_GetError() << std::endl;
         return -1;
     }
 
-    // Crear una ventana, si falla, mostrar un mensaje de error
-    SDL_Window* window = SDL_CreateWindow("Physics Engine", 800, 600, 0);
+    SDL_Window* window = SDL_CreateWindow("Physics Engine", SCREEN_WIDTH, SCREEN_HEIGHT, 0);
     if (!window) {
-        std::cout << "Failed to create window: " << SDL_GetError() << std::endl;
-        SDL_Quit();
+        // ... manejo de error ...
         return -1;
     }
 
-    // Crear un renderizador, si falla, mostrar un mensaje de error
     SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr); 
     if (!renderer) {
         std::cout << "Failed to create renderer: " << SDL_GetError() << std::endl;
@@ -71,14 +27,61 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
-    // Zona de prueba: limpiar la pantalla con un color azul
-    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255); // Azul
-    SDL_RenderClear(renderer); // Limpiar la pantalla
-    SDL_RenderPresent(renderer); // Presentar el contenido renderizado
-    SDL_Delay(10000); // Esperar 10 segundos para ver la ventana
-    SDL_DestroyRenderer(renderer); // Limpiar el renderizador
-    SDL_DestroyWindow(window); // Limpiar la ventana
-    SDL_Quit(); // Salir de SDL
+    // --- CONFIGURACIÓN DE LA SIMULACIÓN ---
+    World world;
+    const float dt = 1.0f / 60.0f; // Delta time: simulamos a 60 fotogramas por segundo
+
+    // Creamos un cuerpo que caerá
+    Body fallingBody(Vector2D(SCREEN_WIDTH / 2.0f, 5.0f), 1.0f); // Posición inicial y masa
+    world.AddBody(fallingBody);
+
+    const Vector2D gravity(0.0f, 1.0f); // Gravedad (multiplicamos para que sea más visible)
+    // --- FIN DE LA CONFIGURACIÓN ---
+
+    bool isRunning = true;
+    SDL_Event event;
+
+    while (isRunning) {
+        // --- 1. MANEJO DE EVENTOS ---
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_EVENT_QUIT) {
+                isRunning = false;
+            }
+        }
+
+        // --- 2. ACTUALIZACIÓN (UPDATE) ---
+        // Aplicamos la fuerza de gravedad a todos los cuerpos
+        for (auto& body : world.GetBodies()) { // Necesitaremos un GetBodies() no-const para esto
+             body.AddForce(gravity);
+        }
+        world.Update(dt);
+
+        // --- 3. RENDERIZADO (DRAW) ---
+        SDL_SetRenderDrawColor(renderer, 20, 20, 40, 255); // Fondo azul
+        SDL_RenderClear(renderer);
+
+        // Imprimimos la posición del cuerpo que cae, solo como debug en consola
+        std::cout << "Posición del cuerpo: " << world.GetBodies()[0].position << std::endl;
+
+        // Dibujamos todos los cuerpos del mundo
+        SDL_SetRenderDrawColor(renderer, 200, 200, 50, 255); // Color amarillo para el objeto
+        for (const auto& body : world.GetBodies()) {
+            SDL_FRect bodyRect = {
+                body.position.x - 12.5f, // Centramos el rectángulo en la posición
+                body.position.y - 12.5f,
+                25.0f, // ¡MÁS GRANDE! Ancho del rectángulo
+                25.0f  // ¡MÁS GRANDE! Alto del rectángulo
+            };
+            SDL_RenderFillRect(renderer, &bodyRect);
+        }
+
+        SDL_RenderPresent(renderer);
+    }
+
+    // Limpieza
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 
     return 0;
 }

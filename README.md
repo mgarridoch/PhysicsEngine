@@ -35,9 +35,9 @@ El desarrollo del motor está planificado en varias fases incrementales.
 -   [x] **Fase 2: Arquitectura del Motor**
     -   [x] Diseño de la clase `Body` para representar objetos físicos.
     -   [x] Diseño de la clase `World` para gestionar la simulación.
--   [ ] **Fase 3: Movimiento e Integración**
-    -   [ ] Implementación de un bucle de física con *timestep* fijo.
-    -   [ ] Integrador de Euler para simular el movimiento.
+-   [x] **Fase 3: Movimiento e Integración**
+    -   [x] Implementación de un bucle de física con *timestep* fijo.
+    -   [x] Integrador de Euler para simular el movimiento.
 -   [ ] **Fase 4: Detección de Colisiones**
     -   [ ] Algoritmos para formas simples (Círculo-Círculo, AABB-AABB).
 -   [ ] **Fase 5: Respuesta a Colisiones**
