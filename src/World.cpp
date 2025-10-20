@@ -2,6 +2,7 @@
 #include "Body.h"
 #include "Vector2D.h"
 #include <cassert>
+#include <iostream>
 
 // Añade un Body al mundo
 void World::AddBody(const Body& body) {
@@ -21,7 +22,7 @@ std::vector<Body>& World::GetBodies() {
 }
 
 // Actualiza la simulación del mundo, lo haremos despues.
-void World::Update(float dt) {
+void World::Update(float dt , int screenWidth, int screenHeight) {
     // Para cada 'body' en nuestra lista de 'm_bodies'...
     for (Body& body : m_bodies) {
         // Aquí dentro es donde aplicarás las 4 fórmulas de Euler. Calcular aceleracion, actualizar velocidad y posición y luego limpiar fuerzas.
@@ -29,6 +30,31 @@ void World::Update(float dt) {
         Vector2D acceleration = body.sumOfForces * body.inverseMass; // NO usamos get ya que es un miembro público, sino habria que usar una función getAcceleration()
         body.velocity += acceleration * dt;
         body.position += body.velocity * dt;
+
+        // Check for border collision (at any border)
+        if (body.position.x - body.width / 2.0f < 0) { // Left border
+            std::cout << "¡Colisión con el borde izquierdo!" << std::endl;
+            body.position.x = body.width / 2.0f;
+            body.velocity.x *= -0.5f; // Simple bounce with damping
+
+        }
+        if (body.position.x + body.width / 2.0f > screenWidth) { // Right border
+            std::cout << "¡Colisión con el borde derecho!" << std::endl;
+            body.position.x = screenWidth - body.width / 2.0f;
+            body.velocity.x *= -0.5f;
+        } 
+        if (body.position.y - body.height / 2.0f < 0) { // Top border
+            std::cout << "¡Colisión con el borde superior!" << std::endl;
+            body.position.y = body.height / 2.0f;
+            body.velocity.y *= -0.5f;
+        } 
+        if (body.position.y + body.height / 2.0f > screenHeight) { // Bottom border
+            std::cout << "¡Colisión con el borde inferior!" << std::endl;
+            body.position.y = screenHeight - body.height / 2.0f; 
+            body.velocity.y *= -0.5f;
+        }
+
+        // Clear forces after update
         body.ClearForces();
 
         

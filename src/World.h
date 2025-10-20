@@ -12,7 +12,7 @@ public:
     void AddBody(const Body& body);
 
     // La función principal que moverá todo. Con dt como delta time (tiempo transcurrido) desde el último frame
-    void Update(float dt);
+    void Update(float dt, int screenWidth, int screenHeight);
 
     // Necesitamos una función para obtener un Body, ya que si desde main.cpp añadimos un Body al World, no tendremos acceso directo a él. (es una copia)
     const Body& GetBody(int index) const;

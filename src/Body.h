@@ -7,13 +7,17 @@ public:
     Vector2D velocity;
     Vector2D sumOfForces; // Para acumular las fuerzas de cada frame
 
+    float width;
+    float height;
     float mass;
     float inverseMass;    // 1 / mass (0 para masa infinita)
 
-    Body(const Vector2D& position, float mass)
+    Body(const Vector2D& position, float width, float height, float mass)
         : position(position), 
           velocity(Vector2D(0, 0)), 
           sumOfForces(Vector2D(0, 0)), 
+          width(width),
+          height(height),
           mass(mass) 
     {
         if (mass == 0.0f) {
