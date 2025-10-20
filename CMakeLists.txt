@@ -22,7 +22,7 @@ set(SDL3_LIBS SDL3)
 
 # Agregamos el ejecutable
 
-add_executable(PhysicsEngine src/main.cpp src/Vector2D.cpp)
+add_executable(PhysicsEngine src/main.cpp src/Vector2D.cpp src/Body.cpp src/World.cpp)
 
 # Linkeamos las bibliotecas de SDL3
 target_link_libraries(PhysicsEngine ${SDL3_LIBS})

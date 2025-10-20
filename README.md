@@ -32,9 +32,9 @@ El desarrollo del motor está planificado en varias fases incrementales.
 -   [x] **Fase 1: Fundamentos Matemáticos**
     -   [x] Implementación de una clase `Vector2D` robusta.
     -   [x] Sobrecarga de operadores para operaciones vectoriales intuitivas.
--   [ ] **Fase 2: Arquitectura del Motor**
-    -   [ ] Diseño de la clase `Body` para representar objetos físicos.
-    -   [ ] Diseño de la clase `World` para gestionar la simulación.
+-   [x] **Fase 2: Arquitectura del Motor**
+    -   [x] Diseño de la clase `Body` para representar objetos físicos.
+    -   [x] Diseño de la clase `World` para gestionar la simulación.
 -   [ ] **Fase 3: Movimiento e Integración**
     -   [ ] Implementación de un bucle de física con *timestep* fijo.
     -   [ ] Integrador de Euler para simular el movimiento.
