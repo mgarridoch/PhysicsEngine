@@ -55,4 +55,71 @@ void World::Update(float dt , int screenWidth, int screenHeight) {
 
         
     }
+    // Función para chequear colisiones AABB entre dos cuerpos
+    for (int i = 0; i < m_bodies.size(); ++i) {
+    for (int j = i + 1; j < m_bodies.size(); ++j) {
+        Body& a = m_bodies[i];
+        Body& b = m_bodies[j];
+        if (CheckAABBCollision(a, b)) {
+            // Por ahora, solo imprime un mensaje
+            std::cout << "COLISION DETECTADA entre cuerpo " << i << " y " << j << "!" << std::endl;
+            ResolveCollision(a, b);
+        }
+    }
+}
+
+}
+
+// Función para chequear colisiones AABB entre dos cuerpos
+bool World::CheckAABBCollision(const Body& a, const Body& b) {
+    // Calcular los bordes de A
+    float aLeft = a.position.x - a.width / 2.0f;
+    float aRight = a.position.x + a.width / 2.0f;
+    float aTop = a.position.y - a.height / 2.0f;
+    float aBottom = a.position.y + a.height / 2.0f;
+
+    // Calcular los bordes de B
+    float bLeft = b.position.x - b.width / 2.0f;
+    float bRight = b.position.x + b.width / 2.0f;
+    float bTop = b.position.y - b.height / 2.0f;
+    float bBottom = b.position.y + b.height / 2.0f;
+
+    // Verificar si hay colisión
+    if (aRight < bLeft || aLeft > bRight || aBottom < bTop || aTop > bBottom) {
+        return false; // No hay colisión
+    }
+    return true; // Hay colisión
+}
+
+// Función para resolver colisiones AABB entre dos cuerpos
+// En World.cpp
+void World::ResolveCollision(Body& a, Body& b) {
+    // 1. Calcula la velocidad relativa entre los dos cuerpos.
+    Vector2D relativeVelocity = b.velocity - a.velocity;
+
+    // 2. Calcula la "normal de colisión", que es el vector que apunta desde el centro de 'a' hacia 'b'.
+    //    ¡No olvides normalizarlo para que sea un vector unitario!
+    Vector2D collisionNormal = b.position - a.position;
+    collisionNormal.Normalize();
+
+    // 3. Calcula la velocidad a lo largo de la normal.
+    //    Usa el producto punto para proyectar la velocidad relativa sobre la normal.
+    float velocityAlongNormal = relativeVelocity.Dot(collisionNormal);
+
+    // Si los objetos ya se están separando, no hagas nada.
+    if (velocityAlongNormal > 0) {
+        return;
+    }
+
+    // 4. Define el coeficiente de restitución (¡ajústalo a tu gusto!).
+    float e = 0.4f; // Un rebote bastante elástico
+
+    // 5. Calcula la magnitud del impulso (la fórmula 2D).
+    float j = -(1 + e) * velocityAlongNormal;
+    j /= a.inverseMass + b.inverseMass;
+
+    // 6. Aplica el impulso a cada cuerpo.
+    Vector2D impulse = collisionNormal * j;
+    a.velocity -= impulse * a.inverseMass;
+    b.velocity += impulse * b.inverseMass;
 }

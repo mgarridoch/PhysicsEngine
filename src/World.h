@@ -20,4 +20,10 @@ public:
     // Función para obtener todos los cuerpos (útil para renderizar)
     const std::vector<Body>& GetBodies() const;
     std::vector<Body>& GetBodies();
+
+    // Función para chequear colisiones AABB entre dos cuerpos
+    bool CheckAABBCollision(const Body& a, const Body& b);
+
+    // Función para resolver colisiones AABB entre dos cuerpos
+    void ResolveCollision(Body& a, Body& b);
 };

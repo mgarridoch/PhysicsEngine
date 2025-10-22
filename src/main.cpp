@@ -42,7 +42,11 @@ int main(int argc, char* argv[]) {
     Body fallingBody(Vector2D(SCREEN_WIDTH / 2.0f, 50.0f), 25.0f, 25.0f, 5.0f); // Posición inicial y masa
     world.AddBody(fallingBody);
 
-    const Vector2D gravity(0.0f, 800.0f); // Gravedad (multiplicamos para que sea más visible)
+    // Creamos cuerpo de "plataforma" estático, con masa 0 (infinita)
+    Body groundBody(Vector2D(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT - 50.0f), 400.0f, 20.0f, 0.0f); // Masa 0 = infinita
+    world.AddBody(groundBody);
+
+    const Vector2D gravity(0.0f, 800.0f); // Gravedad (aumentamos y para que sea más visible)
     // --- FIN DE LA CONFIGURACIÓN ---
 
     bool isRunning = true;

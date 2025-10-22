@@ -38,10 +38,10 @@ El desarrollo del motor está planificado en varias fases incrementales.
 -   [x] **Fase 3: Movimiento e Integración**
     -   [x] Implementación de un bucle de física con *timestep* fijo.
     -   [x] Integrador de Euler para simular el movimiento.
--   [ ] **Fase 4: Detección de Colisiones**
-    -   [ ] Algoritmos para formas simples (Círculo-Círculo, AABB-AABB).
--   [ ] **Fase 5: Respuesta a Colisiones**
-    -   [ ] Implementación de resolución de colisiones basada en impulsos.
+-   [x] **Fase 4: Detección de Colisiones**
+    -   [x] Algoritmos para formas simples (Círculo-Círculo, AABB-AABB).
+-   [x] **Fase 5: Respuesta a Colisiones**
+    -   [x] Implementación de resolución de colisiones basada en impulsos.
 -   [ ] **Fase 6: Optimización y Mejoras**
     -   [ ] (Avanzado) Estructuras de datos espaciales (ej. Quadtree).
     -   [ ] (Avanzado) Implementación de un integrador más preciso (ej. Verlet).
