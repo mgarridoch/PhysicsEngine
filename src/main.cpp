@@ -29,7 +29,12 @@ int main(int argc, char* argv[]) {
     }
 
     // --- CONFIGURACIÓN DE LA SIMULACIÓN ---
-    World world;
+    // 1. Define los límites del mundo en un SDL_FRect
+    SDL_FRect worldBounds = { 0.0f, 0.0f, (float)SCREEN_WIDTH, (float)SCREEN_HEIGHT };
+
+    // 2. Pasa esos límites al crear la instancia de World
+    World world(worldBounds);
+    // --- FIN DE LA CONFIGURACIÓN ---
 
     // --- LÓGICA DE TIEMPO ---
     const float dt = 1.0f / 60.0f; // El timestep FIJO para la física

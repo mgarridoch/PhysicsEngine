@@ -2,12 +2,17 @@
 
 #include "Body.h"
 #include <vector> // ¡Importante incluir la librería para usar std::vector!
+#include "Quadtree.h"
 
 class World {
 private: // Los detalles internos del mundo deben ser privados
+    Quadtree m_quadtree;
     std::vector<Body> m_bodies; // "m_" es una convención común para miembros privados
 
 public:
+    // Constructor que inicializa el Quadtree con los límites del mundo
+    World(const SDL_FRect& worldBounds);
+
     // ¿Cómo sería la declaración de una función que añade un Body a nuestra lista?
     void AddBody(const Body& body);
 
