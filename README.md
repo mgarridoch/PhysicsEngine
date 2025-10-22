@@ -2,8 +2,9 @@
 
 Un proyecto personal para aprender los fundamentos de la ingeniería de software y el desarrollo de videojuegos construyendo un motor de físicas 2D desde cero con C++ moderno y SDL3.
 
-![GIF de la Simulación del Motor de Físicas](assets/Demo.gif)
-*Demostración del motor.*
+<div align="center">
+<img src="assets/Demo.gif" alt="GIF de la Simulación" width="60%">
+</div>
 
 ## 🚀 Acerca del Proyecto
 
